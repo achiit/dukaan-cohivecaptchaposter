@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COHIVE CAPTCHA Poster 9:16</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  /* Canvas: 1080 x 1920 (9:16). Safe zones: 250px top, 350px bottom. */
+  :root {
+    --gold: #c9a96a;
+    --gold-soft: rgba(201, 169, 106, 0.18);
+    --ink: #2b2620;
+    --cream-1: #ffffff;
+    --cream-2: #faf5ea;
+    --cream-3: #f3e9d4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e9e4da;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh;
+  }
+  .poster {
+    position: relative;
+    width: 1080px; height: 1920px;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--cream-1) 0%, var(--cream-2) 55%, var(--cream-3) 100%);
+    font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    transform-origin: top center;
+  }
+
+  /* Header: logo left, vertical tagline right (inside top safe zone start at 250px) */
+  .logo {
+    position: absolute; left: 90px; top: 250px;
+    font-family: "Anton", Impact, sans-serif;
+    font-size: 64px; letter-spacing: 10px; color: var(--ink);
+  }
+  .logo sup { font-size: 22px; letter-spacing: 0; vertical-align: top; }
+  .tagline-vertical {
+    position: absolute; right: 90px; top: 250px;
+    writing-mode: vertical-rl;
+    font-size: 20px; font-weight: 400; letter-spacing: 8px;
+    color: var(--ink); opacity: 0.75;
+  }
+
+  /* Headline */
+  .headline {
+    position: absolute; left: 0; right: 0; top: 430px;
+    text-align: center;
+    font-family: "Anton", Impact, sans-serif;
+    font-size: 118px; line-height: 0.98; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .subhead {
+    position: absolute; left: 0; right: 0; top: 700px;
+    text-align: center;
+    font-size: 24px; font-weight: 300; letter-spacing: 12px; color: var(--ink);
+  }
+
+  /* Giant background word */
+  .bg-word {
+    position: absolute; left: 0; right: 0; top: 820px;
+    text-align: center;
+    font-family: "Anton", Impact, sans-serif;
+    font-size: 460px; line-height: 1;
+    letter-spacing: 6px;
+    color: var(--gold);
+    opacity: 0.16;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Glow circle behind bottle */
+  .glow {
+    position: absolute; left: 50%; top: 880px;
+    width: 720px; height: 720px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232, 201, 132, 0.55) 0%, rgba(232, 201, 132, 0.18) 55%, rgba(232, 201, 132, 0) 72%);
+  }
+
+  /* Bottle: place cutout at captcha-bottle.png (transparent PNG from the original photo) */
+  .bottle {
+    position: absolute; left: 50%; top: 960px;
+    transform: translate(-50%, -50%);
+    width: 520px; height: 760px;
+    object-fit: contain;
+    filter: drop-shadow(0 40px 40px rgba(60, 45, 20, 0.28));
+  }
+  .bottle-placeholder {
+    position: absolute; left: 50%; top: 960px;
+    transform: translate(-50%, -50%);
+    width: 520px; height: 760px;
+    border: 2px dashed rgba(43, 38, 32, 0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; letter-spacing: 3px; color: rgba(43, 38, 32, 0.5);
+    text-align: center; line-height: 1.6;
+  }
+  .reflection {
+    position: absolute; left: 50%; top: 1600px;
+    transform: translateX(-50%);
+    width: 420px; height: 60px;
+    background: radial-gradient(ellipse at center, rgba(201, 169, 106, 0.35), rgba(201, 169, 106, 0));
+  }
+
+  /* Botanical accents (add cut-out PNGs: lavender.png, lemon.png, orange-blossom.png) */
+  .botanical {
+    position: absolute; width: 230px; height: 230px; object-fit: contain; opacity: 0.95;
+  }
+  .botanical.lavender { left: 60px; top: 1040px; }
+  .botanical.lemon { right: 60px; top: 1080px; }
+  .botanical.blossom { left: 110px; top: 1300px; }
+
+  /* Bottom: icon row */
+  .features {
+    position: absolute; left: 90px; right: 90px; top: 1410px;
+    display: flex; justify-content: space-between;
+  }
+  .feature {
+    width: 280px; text-align: center;
+  }
+  .feature svg {
+    width: 64px; height: 64px; stroke: var(--ink); fill: none;
+    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    margin-bottom: 18px;
+  }
+  .feature span {
+    display: block; font-size: 20px; font-weight: 400; letter-spacing: 5px; color: var(--ink);
+  }
+
+  .footer {
+    position: absolute; left: 0; right: 0; top: 1560px;
+    text-align: center;
+    font-size: 18px; font-weight: 300; letter-spacing: 8px; color: var(--ink); opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="logo">CO<span style="letter-spacing:0">H</span>IVE<sup>™</sup></div>
+  <div class="tagline-vertical">CONFIDENCE HAS A SCENT</div>
+
+  <div class="headline">CONFIDENCE STARTS<br>WITH A SCENT</div>
+  <div class="subhead">A WOODY AROMATIC JOURNEY</div>
+
+  <div class="bg-word">SCENT</div>
+  <div class="glow"></div>
+
+  <img class="bottle" src="captcha-bottle.png" alt="COHIVE CAPTCHA 50 ml perfume bottle"
+       onerror="this.style.display='none';document.getElementById('ph').style.display='flex';">
+  <div class="bottle-placeholder" id="ph" style="display:none;">
+    Add transparent PNG<br>captcha-bottle.png<br>(cutout of original photo)
+  </div>
+  <div class="reflection"></div>
+
+  <img class="botanical lavender" src="lavender.png" alt="" onerror="this.style.display='none'">
+  <img class="botanical lemon" src="lemon.png" alt="" onerror="this.style.display='none'">
+  <img class="botanical blossom" src="orange-blossom.png" alt="" onerror="this.style.display='none'">
+
+  <div class="features">
+    <div class="feature">
+      <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M32 16v16l10 6"/></svg>
+      <span>LONG LASTING</span>
+    </div>
+    <div class="feature">
+      <svg viewBox="0 0 64 64"><path d="M32 8 L40 24 L56 32 L40 40 L32 56 L24 40 L8 32 L24 24 Z"/></svg>
+      <span>WOODY AROMATIC</span>
+    </div>
+    <div class="feature">
+      <svg viewBox="0 0 64 64"><circle cx="32" cy="22" r="10"/><path d="M14 56c2-10 10-16 18-16s16 6 18 16"/></svg>
+      <span>EVERYDAY WEAR</span>
+    </div>
+  </div>
+
+  <div class="footer">COHIVE CAPTCHA EAU DE PARFUM</div>
+</div>
+</body>
+</html>
